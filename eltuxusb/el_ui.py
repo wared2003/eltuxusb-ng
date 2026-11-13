@@ -219,8 +219,6 @@ class EltuxusbWindow(Gtk.ApplicationWindow):
         scrolled.set_vexpand(True)
         self.form_revealer.set_child(scrolled)
 
-        self.found.append(self.form_revealer)
-
         self.stack = Gtk.Stack()
         self.stack.add_named(self.not_found, "not_found")
         self.stack.add_named(self.found, "found")
