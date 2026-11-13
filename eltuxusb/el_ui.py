@@ -108,7 +108,7 @@ class EltuxusbWindow(Gtk.ApplicationWindow):
         form.add(name_row)
 
         rate_strings = [s for s, _ in SAMPLE_RATES]
-        rate_drop = Gtk.DropDown(strings=rate_strings)
+        rate_drop = Gtk.DropDown.new_from_strings(rate_strings)
         rate_drop.set_selected(1)
         rate_row = Adw.ActionRow(title="Sample rate")
         rate_row.add_suffix(rate_drop)
