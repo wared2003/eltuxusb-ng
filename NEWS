@@ -1,3 +1,15 @@
+eltuxusb.0.6 (2025-11-13)
+=========================
+
+Other
+-----
+    - Ported to Python 3 (Python 2 support dropped)
+    - User interface rewritten with GTK4 and libadwaita (the Glade file is no longer used)
+    - Graphs are now embedded in the application window
+    - Packaging modernized: setup.py replaced by pyproject.toml, console entry point `eltuxusb`
+    - Added a Flatpak manifest (flatpak/com.github.eltuxusb.eltuxusb.json), desktop file and AppStream metainfo
+    - Cleaned up the star imports
+
 eltuxusb.0.4-SVN (2011-06-03)
 =============================
 

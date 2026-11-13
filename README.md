@@ -1,53 +1,66 @@
 # eltuxusb
 
-This program aim to provide Linux support for the data loggers from Lascar Electronics.
+This program aims to provide Linux support for the data loggers from Lascar Electronics.
 
 ## Supported hardware
 
 This program only works with the following devices:
 
- * ELUSB-1 
+ * ELUSB-1
  * ELUSB-2
  * ELUSB-2-LCD
 
-Support will be extended to other Lascar products if possible (if we actually have another products in our hands).
+Support will be extended to other Lascar products if possible (if we actually have another product in our hands).
+
+## Requirements
+
+ * Python 3.9+
+ * GTK4 and libadwaita (with their GObject introspection bindings)
+ * PyUSB (with libusb)
+ * matplotlib
+
+On Debian 13 (Trixie) / Ubuntu:
+
+    sudo apt install python3 python3-gi gir1.2-gtk-4.0 gir1.2-adwaita-1 python3-usb python3-matplotlib
 
 ## Installation
 
-We need read and write access to the device. To do this as a non-root user, the PIP installer should automatically create the following udev rule: /etc/udev/rules.d/10-local.rules
+### From source (PIP)
 
-    SUBSYSTEM=="usb",ATTR{idVendor}=="10c4",ATTR{idProduct}=="0002",MODE="0666",GROUP="usbusers"
+    pip install .
 
-If not create it by hand.
+The `eltuxusb` command is then available in your $PATH.
 
-With latest udev release the device must also be part of a group, we used here the group "usbusers". You need to create this group in your system and add the desired user(s) into it.
+### Flatpak
 
-### Ubuntu
+A Flatpak manifest is provided in `flatpak/`:
 
-    sudo apt-get install python-dev gcc python-matplotlib python-pip git-core
-    sudo pip install git+http://github.com/eltuxusb/eltuxusb.git#egg=eltuxusb
-    udevadm control --reload-rules (OR sudo reboot)
+    flatpak-builder --user --install --force-clean build-dir flatpak/com.github.eltuxusb.eltuxusb.json
 
-### Fedora
+## USB permissions
 
-    sudo yum install python-pip gcc python-matplotlib python-devel git
-    sudo pip-python install git+http://github.com/eltuxusb/eltuxusb.git#egg=eltuxusb
-    sudo reboot
+We need read and write access to the device. To do this as a non-root user, create the following udev rule in `/etc/udev/rules.d/10-local.rules`:
+
+    SUBSYSTEM=="usb",ATTR{idVendor}=="10c4",ATTR{idProduct}=="0002",MODE="0666"
+
+Then reload the rules:
+
+    sudo udevadm control --reload-rules
 
 ## Usage
 
-Run the program, which PIP should have installed in your $PATH:
+Run the program:
 
     eltuxusb
-    
+
+It can also be used from the command line without the graphical interface:
+
+    eltuxusb -D /home/user/out.txt     # download the recordings to a file
+    eltuxusb -R /home/user/config.txt  # !WARNING! reprogram the device configuration from a file !WARNING!
+    eltuxusb -d                        # debug mode (nothing is written to the device)
+
 ## Remove
 
 To remove the program:
 
-### Ubuntu
-
     sudo pip uninstall eltuxusb
-    
-### Fedora
-    
-    sudo pip-python uninstall eltuxusb

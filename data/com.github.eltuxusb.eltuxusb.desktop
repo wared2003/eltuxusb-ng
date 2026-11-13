@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=ELTuxUSB
+GenericName=Data logger manager
+Comment=Download and configure Lascar EL-USB data loggers
+Exec=eltuxusb
+Icon=com.github.eltuxusb.eltuxusb
+Terminal=false
+Categories=Science;Utility;
+Keywords=logger;temperature;humidity;usb;lascar;

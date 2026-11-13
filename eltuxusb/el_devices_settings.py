@@ -240,7 +240,7 @@ class el_buffer:
 
     def setup(self):
         
-        from el_device import el1_math
+        from .el_device import el1_math
         self.math = el1_math()
 
         # The first 32 bytes are the same for every devices
@@ -327,64 +327,64 @@ class el_buffer:
             self.cnv_default_low_alarm_level_text = self.math.name_translate(self.default_low_alarm_level_text)
 
         if self.debug:
-            print "\n#DEBUG# ###################"
-            print "#DEBUG# RAW DEVICE SETTINGS"
-            print "#DEBUG# DEVICE MODEL: %s" % self.device_model
-            print "#DEBUG# COMMAND TYPE: %s" % self.cmd_type
-            print "#DEBUG# RECORD NAME : %s" % self.name
-            print "#DEBUG# START HOUR  : %s" % self.hour
-            print "#DEBUG# START MINUTE: %s" % self.minutes
-            print "#DEBUG# START SECOND: %s" % self.seconds
-            print "#DEBUG# CALIB M VALUE: %s" % self.calib_m
-            print "#DEBUG# CALIB C VALUE: %s" % self.calib_c
-            print "#DEBUG# SERIAL NUMBER: %s" % self.sn
+            print("\n#DEBUG# ###################")
+            print("#DEBUG# RAW DEVICE SETTINGS")
+            print("#DEBUG# DEVICE MODEL: %s" % self.device_model)
+            print("#DEBUG# COMMAND TYPE: %s" % self.cmd_type)
+            print("#DEBUG# RECORD NAME : %s" % self.name)
+            print("#DEBUG# START HOUR  : %s" % self.hour)
+            print("#DEBUG# START MINUTE: %s" % self.minutes)
+            print("#DEBUG# START SECOND: %s" % self.seconds)
+            print("#DEBUG# CALIB M VALUE: %s" % self.calib_m)
+            print("#DEBUG# CALIB C VALUE: %s" % self.calib_c)
+            print("#DEBUG# SERIAL NUMBER: %s" % self.sn)
 
 
             self.sn = self.actual_buffer[52:56]
 
             if self.model == "elusb3_2":
-                print "#DEBUG# DISPLAY UNIT TEXT: %s" % self.display_unit_text
-                print "#DEBUG# CALIBRATION INPUT1 TEXT: %s" % self.calibration_input1_text
-                print "#DEBUG# CALIBRATION OUTPUT1 TEXT: %s" % self.calibration_output1_text
-                print "#DEBUG# CALIBRATION INPUT2 TEXT: %s" % self.calibration_input2_text
-                print "#DEBUG# CALIBRATION OUTPUT2 TEXT: %s" % self.calibration_output2_text
-                print "#DEBUG# SCALING FACTOR: %s" % self.scaling_factor
-                print "#DEBUG# HIGH ALARM LEVEL TEXT: %s" % self.high_alarm_level_text
-                print "#DEBUG# LOW ALARM LEVEL TEXT: %s" % self.low_alarm_level_text
-                print "#DEBUG# DEFAULT RANGE DECRIPTION TEXT: %s" % self.default_range_description_text
-                print "#DEBUG# DEFAULT INPUT UNIT TEXT: %s" % self.default_input_unit_text
-                print "#DEBUG# DEFAULT DISPLAY UNIT: %s" % self.default_display_unit
-                print "#DEBUG# DEFAULT CALIBRATION INPUT1 TEXT: %s" % self.default_calibration_input1_text
-                print "#DEBUG# DEFAULT CALIBRATION OUTPUT1 TEXT: %s" % self.default_calibration_output1_text
-                print "#DEBUG# DEFAULT CALIBRATION INPUT2 TEXT: %s" % self.default_calibration_input2_text
-                print "#DEBUG# DEFAULT CALIBRATION OUTPUT2 TEXT: %s" % self.default_calibration_output2_text
-                print "#DEBUG# DEFAULT HIGH ALARM LEVEL TEXT: %s" % self.default_high_alarm_level_text
-                print "#DEBUG# DEFAULT LOW ALARM LEVEL TEXT: %s" % self.default_low_alarm_level_text
+                print("#DEBUG# DISPLAY UNIT TEXT: %s" % self.display_unit_text)
+                print("#DEBUG# CALIBRATION INPUT1 TEXT: %s" % self.calibration_input1_text)
+                print("#DEBUG# CALIBRATION OUTPUT1 TEXT: %s" % self.calibration_output1_text)
+                print("#DEBUG# CALIBRATION INPUT2 TEXT: %s" % self.calibration_input2_text)
+                print("#DEBUG# CALIBRATION OUTPUT2 TEXT: %s" % self.calibration_output2_text)
+                print("#DEBUG# SCALING FACTOR: %s" % self.scaling_factor)
+                print("#DEBUG# HIGH ALARM LEVEL TEXT: %s" % self.high_alarm_level_text)
+                print("#DEBUG# LOW ALARM LEVEL TEXT: %s" % self.low_alarm_level_text)
+                print("#DEBUG# DEFAULT RANGE DECRIPTION TEXT: %s" % self.default_range_description_text)
+                print("#DEBUG# DEFAULT INPUT UNIT TEXT: %s" % self.default_input_unit_text)
+                print("#DEBUG# DEFAULT DISPLAY UNIT: %s" % self.default_display_unit)
+                print("#DEBUG# DEFAULT CALIBRATION INPUT1 TEXT: %s" % self.default_calibration_input1_text)
+                print("#DEBUG# DEFAULT CALIBRATION OUTPUT1 TEXT: %s" % self.default_calibration_output1_text)
+                print("#DEBUG# DEFAULT CALIBRATION INPUT2 TEXT: %s" % self.default_calibration_input2_text)
+                print("#DEBUG# DEFAULT CALIBRATION OUTPUT2 TEXT: %s" % self.default_calibration_output2_text)
+                print("#DEBUG# DEFAULT HIGH ALARM LEVEL TEXT: %s" % self.default_high_alarm_level_text)
+                print("#DEBUG# DEFAULT LOW ALARM LEVEL TEXT: %s" % self.default_low_alarm_level_text)
  
-            print "\n#DEBUG# ###################"
-            print "#DEBUG# CONVERTED DEVICE SETTINGS"
-            print "#DEBUG# SERIAL NUMBER: %s" % self.cnv_sn
-            print "#DEBUG# CALIBRATION M VALUE: %s" % self.cnv_calib_m
-            print "#DEBUG# CALIBRATION C VALUE: %s" % self.cnv_calib_c
+            print("\n#DEBUG# ###################")
+            print("#DEBUG# CONVERTED DEVICE SETTINGS")
+            print("#DEBUG# SERIAL NUMBER: %s" % self.cnv_sn)
+            print("#DEBUG# CALIBRATION M VALUE: %s" % self.cnv_calib_m)
+            print("#DEBUG# CALIBRATION C VALUE: %s" % self.cnv_calib_c)
 
             if self.model == "elusb3_2":
-                print "#DEBUG# DISPLAY UNIT TEXT: %s" % self.cnv_display_unit_text
-                print "#DEBUG# CALIBRATION INPUT1 TEXT: %s" % self.cnv_calibration_input1_text
-                print "#DEBUG# CALIBRATION OUTPUT1 TEXT: %s" % self.cnv_calibration_output1_text     
-                print "#DEBUG# CALIBRATION INPUT2 TEXT: %s" % self.cnv_calibration_input2_text
-                print "#DEBUG# CALIBRATION OUTPUT2 TEXT: %s" % self.cnv_calibration_output2_text
-                print "#DEBUG# SCALING FACTOR: %f" % self.cnv_scaling_factor
-                print "#DEBUG# HIGH ALARM LEVEL TEXT: %s" % self.cnv_high_alarm_level_text
-                print "#DEBUG# LOW ALARM LEVEL TEXT: %s" % self.cnv_low_alarm_level_text
-                print "#DEBUG# DEFAULT RANGE DESCRIPTION TEXT: %s" % self.cnv_default_range_description_text
-                print "#DEBUG# DEFAULT INPUT UNIT TEXT: %s" % self.cnv_default_input_unit_text
-                print "#DEBUG# DEFAULT DISPLAY UNIT: %s" % self.cnv_default_display_unit
-                print "#DEBUG# DEFAULT CALIBRATION INPUT1 TEXT: %s" % self.cnv_default_calibration_input1_text
-                print "#DEBUG# DEFAULT CALIBRATION OUTPUT1 TEXT: %s" % self.cnv_default_calibration_output1_text
-                print "#DEBUG# DEFAULT CALIBRATION INPUT2 TEXT: %s" % self.cnv_default_calibration_input2_text
-                print "#DEBUG# DEFAULT CALIBRATION OUTPUT2 TEXT: %s" % self.cnv_default_calibration_output2_text
-                print "#DEBUG# DEFAULT HIGH ALARM LEVEL TEXT: %s" % self.cnv_default_high_alarm_level_text
-                print "#DEBUG# DEFAULT LOW ALARM LEVEL TEXT: %s" % self.cnv_default_low_alarm_level_text
+                print("#DEBUG# DISPLAY UNIT TEXT: %s" % self.cnv_display_unit_text)
+                print("#DEBUG# CALIBRATION INPUT1 TEXT: %s" % self.cnv_calibration_input1_text)
+                print("#DEBUG# CALIBRATION OUTPUT1 TEXT: %s" % self.cnv_calibration_output1_text)     
+                print("#DEBUG# CALIBRATION INPUT2 TEXT: %s" % self.cnv_calibration_input2_text)
+                print("#DEBUG# CALIBRATION OUTPUT2 TEXT: %s" % self.cnv_calibration_output2_text)
+                print("#DEBUG# SCALING FACTOR: %f" % self.cnv_scaling_factor)
+                print("#DEBUG# HIGH ALARM LEVEL TEXT: %s" % self.cnv_high_alarm_level_text)
+                print("#DEBUG# LOW ALARM LEVEL TEXT: %s" % self.cnv_low_alarm_level_text)
+                print("#DEBUG# DEFAULT RANGE DESCRIPTION TEXT: %s" % self.cnv_default_range_description_text)
+                print("#DEBUG# DEFAULT INPUT UNIT TEXT: %s" % self.cnv_default_input_unit_text)
+                print("#DEBUG# DEFAULT DISPLAY UNIT: %s" % self.cnv_default_display_unit)
+                print("#DEBUG# DEFAULT CALIBRATION INPUT1 TEXT: %s" % self.cnv_default_calibration_input1_text)
+                print("#DEBUG# DEFAULT CALIBRATION OUTPUT1 TEXT: %s" % self.cnv_default_calibration_output1_text)
+                print("#DEBUG# DEFAULT CALIBRATION INPUT2 TEXT: %s" % self.cnv_default_calibration_input2_text)
+                print("#DEBUG# DEFAULT CALIBRATION OUTPUT2 TEXT: %s" % self.cnv_default_calibration_output2_text)
+                print("#DEBUG# DEFAULT HIGH ALARM LEVEL TEXT: %s" % self.cnv_default_high_alarm_level_text)
+                print("#DEBUG# DEFAULT LOW ALARM LEVEL TEXT: %s" % self.cnv_default_low_alarm_level_text)
 
 
 
