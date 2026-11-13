@@ -21,7 +21,7 @@ Support will be extended to other Lascar products if possible (if we actually ha
 
 On Debian 13 (Trixie) / Ubuntu:
 
-    sudo apt install python3 python3-gi gir1.2-gtk-4.0 gir1.2-adwaita-1 python3-usb python3-matplotlib
+    sudo apt install python3 python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 python3-usb python3-matplotlib
 
 ## Installation
 
