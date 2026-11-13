@@ -367,7 +367,15 @@ class EltuxusbWindow(Gtk.ApplicationWindow):
             path = file.get_path()
 
             def worker():
-                ok = self.dev1.init() and self.dev1.download() and self.dev1.clear_flag_bits()
+                try:
+                    ok = self.dev1.init() is not False
+                    if ok:
+                        ok = self.dev1.download() is not False
+                    if ok:
+                        ok = self.dev1.clear_flag_bits() is not False
+                except usb.core.USBError as e:
+                    self.dev1.last_error = str(e)
+                    ok = False
                 GLib.idle_add(self._download_done, ok, path)
 
             import threading
