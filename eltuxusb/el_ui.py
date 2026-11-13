@@ -268,11 +268,19 @@ class EltuxusbWindow(Gtk.ApplicationWindow):
     # ------------------------------------------------------------ device ops
 
     def refresh(self, source=None):
-        if self.dev1.init() is False:
+        try:
+            init_ok = self.dev1.init() is not False
+        except usb.core.USBError as e:
+            self.dev1.last_error = str(e)
+            init_ok = False
+        if not init_ok:
             self.status_label.set_text(self.dev1.get_last_err())
             self.device_label.set_text("")
             self.recordings_label.set_text("")
             self.stack.set_visible_child(self.not_found)
+            err = self.dev1.get_last_err()
+            if err:
+                self.not_found.set_description(err)
             self.stop_button.set_sensitive(False)
             self.download_button.set_sensitive(False)
             self.new_button.set_sensitive(False)
