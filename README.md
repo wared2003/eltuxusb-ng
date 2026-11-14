@@ -33,9 +33,10 @@ The `eltuxusb` command is then available in your $PATH.
 
 ### Flatpak
 
-Install it from the Flatpak repository published on GitHub Pages:
+Install it from the signed Flatpak repository published on GitHub Pages:
 
-    flatpak remote-add --if-not-exists --no-gpg-verify eltuxusb https://wared2003.github.io/eltuxusb-ng
+    wget https://wared2003.github.io/eltuxusb-ng/eltuxusb-repo.gpg
+    flatpak remote-add --if-not-exists --gpg-import=eltuxusb-repo.gpg eltuxusb https://wared2003.github.io/eltuxusb-ng
     flatpak install eltuxusb com.github.eltuxusb.eltuxusb
 
 Or build it yourself from the manifest in `flatpak/`:
