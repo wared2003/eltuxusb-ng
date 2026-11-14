@@ -95,7 +95,10 @@ réels téléchargés avec succès sur un EL-USB-2-LCD (série 061204174, nom «
   Prérequis manuel UNE FOIS : Settings → Pages → Source = « GitHub Actions ».
 - Le dépôt est SIGNÉ GPG : la workflow importe la clé privée depuis le secret GitHub
   `FLATPAK_GPG_PRIVATE_KEY` (clé ed25519, sans passphrase, fingerprint
-  `73015E7FEDCE7BFD91624423CE1D8D02552368D2`) et build avec `--gpg-sign=<fpr>` ;
+  `73015E7FEDCE7BFD91624423CE1D8D02552368D2`, secret = bloc armored BRUT
+  `-----BEGIN PGP PRIVATE KEY BLOCK-----`, PAS du base64) importée dans un
+  GNUPGHOME dédié (`${{ runner.temp }}/gnupg`, propagé via `$GITHUB_ENV`) ;
+  build avec `--gpg-sign=<fpr>` ;
   la clé publique `flatpak/eltuxusb-repo.gpg` est copiée dans `repo/` donc servie sur Pages.
   Clé privée sur la machine du proprio : `~/eltuxusb-repo-signing-private.asc` (à coller
   dans Settings → Secrets → Actions → `FLATPAK_GPG_PRIVATE_KEY`, ne PAS committer).

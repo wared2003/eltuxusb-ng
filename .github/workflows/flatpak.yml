@@ -35,7 +35,17 @@ jobs:
         run: flatpak install --user --noninteractive flathub org.gnome.Sdk//51 org.gnome.Platform//51
 
       - name: Import the repository signing key
-        run: echo "${{ secrets.FLATPAK_GPG_PRIVATE_KEY }}" | gpg --batch --import
+        env:
+          GNUPGHOME: ${{ runner.temp }}/gnupg
+        run: |
+          mkdir -p "$GNUPGHOME" && chmod 700 "$GNUPGHOME"
+          echo "GNUPGHOME=$GNUPGHOME" >> "$GITHUB_ENV"
+          if [ -z "${{ secrets.FLATPAK_GPG_PRIVATE_KEY }}" ]; then
+            echo "Secret FLATPAK_GPG_PRIVATE_KEY is missing (paste the raw armored private key, not base64)"
+            exit 1
+          fi
+          echo "${{ secrets.FLATPAK_GPG_PRIVATE_KEY }}" | gpg --batch --import
+          gpg --batch --list-secret-keys 73015E7FEDCE7BFD91624423CE1D8D02552368D2
 
       - name: Build the flatpak repository (signed)
         run: flatpak-builder --user --gpg-sign=73015E7FEDCE7BFD91624423CE1D8D02552368D2 --force-clean --repo=repo build-dir flatpak/com.github.eltuxusb.eltuxusb.json
