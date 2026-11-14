@@ -89,7 +89,7 @@ réels téléchargés avec succès sur un EL-USB-2-LCD (série 061204174, nom «
   `build-options.build-args: ["--share=network"]` est INDISPENSABLE : le bac à sable
   flatpak-builder n'a pas le réseau par défaut → pip échoue (DNS) sinon.
   `--device=all` dans finish-args pour l'USB ; la règle udev hôte reste nécessaire.
-- Workflow `.github/workflows/flatpak.yml` (tags `v*` + workflow_dispatch) :
+- Workflow `.github/workflows/flatpak.yml` (push sur `main` + tags `v*` + workflow_dispatch) :
   `flatpak-builder --user --force-clean --repo=repo build-dir <manifeste>` puis
   `flatpak build-bundle repo com.github.eltuxusb.eltuxusb.flatpak com.github.eltuxusb.eltuxusb master`
   (NON signé, volontaire), upload en artifact de run (`actions/upload-artifact@v4`)
