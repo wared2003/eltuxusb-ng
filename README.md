@@ -33,9 +33,16 @@ The `eltuxusb` command is then available in your $PATH.
 
 ### Flatpak
 
-A Flatpak manifest is provided in `flatpak/`:
+Install it from the Flatpak repository published on GitHub Pages:
+
+    flatpak remote-add --if-not-exists --no-gpg-verify eltuxusb https://wared2003.github.io/eltuxusb-ng
+    flatpak install eltuxusb com.github.eltuxusb.eltuxusb
+
+Or build it yourself from the manifest in `flatpak/`:
 
     flatpak-builder --user --install --force-clean build-dir flatpak/com.github.eltuxusb.eltuxusb.json
+
+The udev rule described below is still required on the host for USB access.
 
 ## USB permissions
 

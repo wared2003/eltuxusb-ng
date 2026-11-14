@@ -81,6 +81,26 @@ réels téléchargés avec succès sur un EL-USB-2-LCD (série 061204174, nom «
 - Tester dans l'ordre : sans device → device (-d) → écritures réelles (si autorisé).
 - Ordre des tests UI : Refresh → Download → Graph → New recording/Apply (-d d'abord) → Stop → CLI -D.
 
+## Flatpak + pipeline GitHub Pages (option retenue, pas Flathub)
+
+- Manifeste : `flatpak/com.github.eltuxusb.eltuxusb.json` — runtime `org.gnome.Platform//51`
+  (48 est EOL depuis 2026-03), module `libusb` 1.0.29 compilé `--disable-udev`
+  (pyusb sinon : `NoBackendError: No backend available`), puis pip pyusb/matplotlib/app.
+  `build-options.build-args: ["--share=network"]` est INDISPENSABLE : le bac à sable
+  flatpak-builder n'a pas le réseau par défaut → pip échoue (DNS) sinon.
+  `--device=all` dans finish-args pour l'USB ; la règle udev hôte reste nécessaire.
+- Dépôt publié sur GitHub Pages : workflow `.github/workflows/flatpak.yml`
+  (déclenché sur tags `v*` + workflow_dispatch) build avec `flatpak-builder --repo=repo`
+  puis déploie `repo/` via `actions/configure-pages@v5` + `upload-pages-artifact@v3` + `deploy-pages@v4`.
+  Prérequis manuel UNE FOIS : Settings → Pages → Source = « GitHub Actions ».
+- Install utilisateur (dépôt non signé) :
+  `flatpak remote-add --if-not-exists --no-gpg-verify eltuxusb https://wared2003.github.io/eltuxusb-ng`
+  puis `flatpak install eltuxusb com.github.eltuxusb.eltuxusb`.
+- Test local du build : `flatpak-builder --user --force-clean --state-dir=<dir même fs que build> --repo=<repo> <build> flatpak/...json`
+  (state dir par défaut dans le repo = autre filesystem que /tmp → flatpak-builder 1.4.4 sort en erreur 1).
+- Piège : `application_id="com.github.eltuxusb.eltuxusb"` → une instance flatpak se « handoff »
+  à une instance système déjà lancée et sort 0 immédiatement (comportement normal, pas un bug).
+
 ## Push depuis un sandbox sans identifiants git
 
 `git push` HTTPS échoue (pas de credentials). Utiliser le connecteur GitHub :

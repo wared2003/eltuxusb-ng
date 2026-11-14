@@ -24,3 +24,8 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+# Flatpak build artifacts
+.flatpak-builder/
+build-dir/
+repo/

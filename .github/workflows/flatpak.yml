@@ -1,0 +1,53 @@
+name: Flatpak
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  flatpak:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install flatpak and flatpak-builder
+        uses: flatpak/flatpak-github-action@v1
+        with:
+          branch: stable
+
+      - name: Add flathub remote
+        run: flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+      - name: Install GNOME SDK and Platform 51
+        run: flatpak install --user --noninteractive flathub org.gnome.Sdk//51 org.gnome.Platform//51
+
+      - name: Build the flatpak repository
+        run: flatpak-builder --user --force-clean --repo=repo build-dir flatpak/com.github.eltuxusb.eltuxusb.json
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload the repository as Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: repo
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
