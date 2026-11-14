@@ -34,8 +34,14 @@ jobs:
       - name: Install GNOME SDK and Platform 51
         run: flatpak install --user --noninteractive flathub org.gnome.Sdk//51 org.gnome.Platform//51
 
-      - name: Build the flatpak repository
-        run: flatpak-builder --user --force-clean --repo=repo build-dir flatpak/com.github.eltuxusb.eltuxusb.json
+      - name: Import the repository signing key
+        run: echo "${{ secrets.FLATPAK_GPG_PRIVATE_KEY }}" | gpg --batch --import
+
+      - name: Build the flatpak repository (signed)
+        run: flatpak-builder --user --gpg-sign=73015E7FEDCE7BFD91624423CE1D8D02552368D2 --force-clean --repo=repo build-dir flatpak/com.github.eltuxusb.eltuxusb.json
+
+      - name: Publish the public key alongside the repository
+        run: cp flatpak/eltuxusb-repo.gpg repo/
 
       - name: Setup Pages
         id: pages

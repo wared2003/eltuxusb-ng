@@ -93,9 +93,17 @@ réels téléchargés avec succès sur un EL-USB-2-LCD (série 061204174, nom «
   (déclenché sur tags `v*` + workflow_dispatch) build avec `flatpak-builder --repo=repo`
   puis déploie `repo/` via `actions/configure-pages@v5` + `upload-pages-artifact@v3` + `deploy-pages@v4`.
   Prérequis manuel UNE FOIS : Settings → Pages → Source = « GitHub Actions ».
-- Install utilisateur (dépôt non signé) :
-  `flatpak remote-add --if-not-exists --no-gpg-verify eltuxusb https://wared2003.github.io/eltuxusb-ng`
+- Le dépôt est SIGNÉ GPG : la workflow importe la clé privée depuis le secret GitHub
+  `FLATPAK_GPG_PRIVATE_KEY` (clé ed25519, sans passphrase, fingerprint
+  `73015E7FEDCE7BFD91624423CE1D8D02552368D2`) et build avec `--gpg-sign=<fpr>` ;
+  la clé publique `flatpak/eltuxusb-repo.gpg` est copiée dans `repo/` donc servie sur Pages.
+  Clé privée sur la machine du proprio : `~/eltuxusb-repo-signing-private.asc` (à coller
+  dans Settings → Secrets → Actions → `FLATPAK_GPG_PRIVATE_KEY`, ne PAS committer).
+- Install utilisateur (dépôt signé) :
+  `wget https://wared2003.github.io/eltuxusb-ng/eltuxusb-repo.gpg` puis
+  `flatpak remote-add --if-not-exists --gpg-import=eltuxusb-repo.gpg eltuxusb https://wared2003.github.io/eltuxusb-ng`
   puis `flatpak install eltuxusb com.github.eltuxusb.eltuxusb`.
+  Sans la clé, l'install échoue : « Can't pull from untrusted non-gpg verified remote ».
 - Test local du build : `flatpak-builder --user --force-clean --state-dir=<dir même fs que build> --repo=<repo> <build> flatpak/...json`
   (state dir par défaut dans le repo = autre filesystem que /tmp → flatpak-builder 1.4.4 sort en erreur 1).
 - Piège : `application_id="com.github.eltuxusb.eltuxusb"` → une instance flatpak se « handoff »
