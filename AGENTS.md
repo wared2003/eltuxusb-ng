@@ -81,7 +81,7 @@ réels téléchargés avec succès sur un EL-USB-2-LCD (série 061204174, nom «
 - Tester dans l'ordre : sans device → device (-d) → écritures réelles (si autorisé).
 - Ordre des tests UI : Refresh → Download → Graph → New recording/Apply (-d d'abord) → Stop → CLI -D.
 
-## Flatpak + pipeline GitHub Pages (option retenue, pas Flathub)
+## Flatpak (distribution par release GitHub, SANS signature GPG — version simple retenue)
 
 - Manifeste : `flatpak/com.github.eltuxusb.eltuxusb.json` — runtime `org.gnome.Platform//51`
   (48 est EOL depuis 2026-03), module `libusb` 1.0.29 compilé `--disable-udev`
@@ -89,29 +89,17 @@ réels téléchargés avec succès sur un EL-USB-2-LCD (série 061204174, nom «
   `build-options.build-args: ["--share=network"]` est INDISPENSABLE : le bac à sable
   flatpak-builder n'a pas le réseau par défaut → pip échoue (DNS) sinon.
   `--device=all` dans finish-args pour l'USB ; la règle udev hôte reste nécessaire.
-- Dépôt publié sur GitHub Pages : workflow `.github/workflows/flatpak.yml`
-  (déclenché sur tags `v*` + workflow_dispatch) build avec `flatpak-builder --repo=repo`
-  puis déploie `repo/` via `actions/configure-pages@v5` + `upload-pages-artifact@v3` + `deploy-pages@v4`.
-  Prérequis manuel UNE FOIS : Settings → Pages → Source = « GitHub Actions ».
-- Le dépôt est SIGNÉ GPG : la workflow importe la clé privée depuis le secret GitHub
-  `FLATPAK_GPG_PRIVATE_KEY` (clé ed25519, sans passphrase, fingerprint
-  `73015E7FEDCE7BFD91624423CE1D8D02552368D2`, secret = bloc armored BRUT
-  `-----BEGIN PGP PRIVATE KEY BLOCK-----`, PAS du base64) importée dans un
-  GNUPGHOME dédié (`${{ runner.temp }}/gnupg`, propagé via `$GITHUB_ENV`) ;
-  build avec `--gpg-sign=<fpr>` ;
-  la clé publique `flatpak/eltuxusb-repo.gpg` est copiée dans `repo/` donc servie sur Pages.
-  Clé privée sur la machine du proprio : `~/eltuxusb-repo-signing-private.asc` (à coller
-  dans Settings → Secrets → Actions → `FLATPAK_GPG_PRIVATE_KEY`, ne PAS committer).
-- Install utilisateur (dépôt signé) :
-  `wget https://wared2003.github.io/eltuxusb-ng/eltuxusb-repo.gpg` puis
-  `flatpak remote-add --if-not-exists --gpg-import=eltuxusb-repo.gpg eltuxusb https://wared2003.github.io/eltuxusb-ng`
-  puis `flatpak install eltuxusb com.github.eltuxusb.eltuxusb`.
-  Sans la clé, l'install échoue : « Can't pull from untrusted non-gpg verified remote ».
-- Un bundle mono-fichier signé `com.github.eltuxusb.eltuxusb.flatpak` est exporté
-  (`flatpak build-bundle --gpg-sign=<fpr> repo ...`) et uploadé en asset de la
-  release GitHub sur les tags `v*` via `softprops/action-gh-release@v2`
-  (d'où `permissions: contents: write`). Install : `flatpak install <fichier>.flatpak`,
-  aucune clé GPG requise côté utilisateur pour un bundle.
+- Workflow `.github/workflows/flatpak.yml` (tags `v*` + workflow_dispatch) :
+  `flatpak-builder --user --force-clean --repo=repo build-dir <manifeste>` puis
+  `flatpak build-bundle repo com.github.eltuxusb.eltuxusb.flatpak com.github.eltuxusb.eltuxusb master`
+  (NON signé, volontaire), upload en artifact de run (`actions/upload-artifact@v4`)
+  + asset de la release GitHub sur les tags via `softprops/action-gh-release@v2`
+  (`permissions: contents: write`). PAS de dépôt Pages / remote signé (abandonné :
+  la vérif GPG des remotes non signés bloque l'install « Can't pull from untrusted
+  non-gpg verified remote »).
+- Install utilisateur : télécharger le `.flatpak` de la dernière release puis
+  `flatpak install com.github.eltuxusb.eltuxusb.flatpak` — aucune clé GPG requise
+  pour un bundle (testé localement).
 - Test local du build : `flatpak-builder --user --force-clean --state-dir=<dir même fs que build> --repo=<repo> <build> flatpak/...json`
   (state dir par défaut dans le repo = autre filesystem que /tmp → flatpak-builder 1.4.4 sort en erreur 1).
 - Piège : `application_id="com.github.eltuxusb.eltuxusb"` → une instance flatpak se « handoff »
