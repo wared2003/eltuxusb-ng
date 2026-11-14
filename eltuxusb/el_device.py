@@ -366,6 +366,8 @@ class el1_device:
         read_device = self.address.read(0x82, 0x03, 1000)
 
         self.address.ctrl_transfer(bmRequestType=0x40, bRequest=0x02, wValue=0x04)
+
+        usb.util.release_interface(self.address, 0x00)
         return True
 
     # Reads the device status (recording, stopped, ...)
@@ -416,6 +418,7 @@ class el1_device:
         if self.debug:
             print("#DEBUG# RECORDED DATAS: %s" % self.read_block[0:1000])
 
+        usb.util.release_interface(self.address, 0x00)
         return True
 
 
