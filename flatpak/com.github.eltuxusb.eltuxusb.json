@@ -1,0 +1,67 @@
+{
+    "app-id": "com.github.eltuxusb.eltuxusb",
+    "runtime": "org.gnome.Platform",
+    "runtime-version": "51",
+    "sdk": "org.gnome.Sdk",
+    "command": "eltuxusb",
+    "build-options": {
+        "build-args": [
+            "--share=network"
+        ]
+    },
+    "finish-args": [
+        "--share=ipc",
+        "--socket=fallback-x11",
+        "--socket=wayland",
+        "--device=all",
+        "--filesystem=home"
+    ],
+    "modules": [
+        {
+            "name": "libusb",
+            "buildsystem": "autotools",
+            "config-opts": [
+                "--disable-udev"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/libusb/libusb/releases/download/v1.0.29/libusb-1.0.29.tar.bz2",
+                    "sha256": "5977fc950f8d1395ccea9bd48c06b3f808fd3c2c961b44b0c2e6e29fc3a70a85"
+                }
+            ]
+        },
+        {
+            "name": "python3-pyusb",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --verbose --exists-action=i --no-build-isolation --prefix=${FLATPAK_DEST} pyusb"
+            ]
+        },
+        {
+            "name": "python3-matplotlib",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --verbose --exists-action=i --no-build-isolation --prefix=${FLATPAK_DEST} matplotlib"
+            ]
+        },
+        {
+            "name": "eltuxusb",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --verbose --exists-action=i --no-build-isolation --prefix=${FLATPAK_DEST} ."
+            ],
+            "post-install": [
+                "install -Dm644 -t ${FLATPAK_DEST}/share/applications data/com.github.eltuxusb.eltuxusb.desktop",
+                "install -Dm644 -t ${FLATPAK_DEST}/share/metainfo data/com.github.eltuxusb.eltuxusb.metainfo.xml",
+                "install -Dm644 eltuxusb/eltuxusb.png ${FLATPAK_DEST}/share/icons/hicolor/256x256/apps/com.github.eltuxusb.eltuxusb.png"
+            ],
+            "sources": [
+                {
+                    "type": "dir",
+                    "path": ".."
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eltuxusb"
+version = "0.6"
+description = "Linux support for the EL-USB data loggers from Lascar Electronics"
+readme = "README.md"
+license = { text = "GPL-3.0-or-later" }
+authors = [{ name = "Romain Aviolat", email = "r.aviolat@gmail.com" }]
+maintainers = [{ name = "David Strauss", email = "david@davidstrauss.net" }]
+requires-python = ">=3.9"
+dependencies = [
+    "pyusb",
+    "matplotlib",
+    "PyGObject",
+]
+classifiers = [
+    "Environment :: X11 Applications :: GTK",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+]
+
+[project.urls]
+Homepage = "https://github.com/eltuxusb/eltuxusb"
+
+[project.scripts]
+eltuxusb = "eltuxusb.__main__:main"
+
+[tool.setuptools]
+packages = ["eltuxusb"]
+
+[tool.setuptools.package-data]
+eltuxusb = ["*.png"]

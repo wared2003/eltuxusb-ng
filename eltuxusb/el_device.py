@@ -7,7 +7,7 @@ import sys
 import datetime
 import time
 #import el_devices_settings *
-from el_devices_settings import el_settings, el_buffer
+from .el_devices_settings import el_settings, el_buffer
 
 class el1_buffer:
     "Device configuration buffer"
@@ -15,12 +15,12 @@ class el1_buffer:
         self.model = 1
         self.cmd_typ = 0
         self.name = ["rec1"]
-        self.hour = time.localtime()[3]
-        self.minute = time.localtime()[4]
-        self.seconds = time.localtime()[5]
-        self.day = time.localtime()[2]
-        self.month = time.localtime()[1]
-        self.year = time.localtime()[0]
+        self.hour = time.localtime().tm_hour
+        self.minute = time.localtime().tm_min
+        self.seconds = time.localtime().tm_sec
+        self.day = time.localtime().tm_mday
+        self.month = time.localtime().tm_mon
+        self.year = time.localtime().tm_year
         self.start_offset = 0
         self.sample_rate = 60
         self.sample_count = 0
@@ -177,7 +177,7 @@ class el1_device:
         return self.last_error
 
     def print_last_err(self):
-        print self.get_last_error()
+        print(self.get_last_error())
 
     def get_data(self):
         return self.read_block
@@ -220,15 +220,15 @@ class el1_device:
         self.new_buffer.set_model(self.device_model)
 
         if self.debug:
-            print "#DEBUG# DEVICE IDENT: %s" % self.read_config[0]
-            print "#DEBUG# DEVICE MODEL: %s" % self.device_model
-            print "#DEBUG# DEVICE NAME : %s" % self.device_full_name
+            print("#DEBUG# DEVICE IDENT: %s" % self.read_config[0])
+            print("#DEBUG# DEVICE MODEL: %s" % self.device_model)
+            print("#DEBUG# DEVICE NAME : %s" % self.device_full_name)
 
     # Download datas
     def download(self):
 
         if self.status_read() != True:
-            print "status error"
+            print("status error")
             return False
 
         else:
@@ -245,7 +245,7 @@ class el1_device:
         stop_buffer = self.new_buffer.get_modified_buffer()
 
         if self.debug:
-            print "#DEBUG# STOP BUFFER: %s" % stop_buffer
+            print("#DEBUG# STOP BUFFER: %s" % stop_buffer)
 
         else:
             if self.config_write(stop_buffer) != True:
@@ -269,7 +269,7 @@ class el1_device:
             stop_buffer = self.new_buffer.get_modified_buffer()
             
             if self.debug:
-                print "#DEBUG# stop buffer  : %s" % stop_buffer
+                print("#DEBUG# stop buffer  : %s" % stop_buffer)
                 self.status = "#DEBUG# not stopped and NOT downloaded"
 
             else:
@@ -313,7 +313,7 @@ class el1_device:
         if self.config_write(self.backup_buffer2) != True:
             return False
         else:
-            print "OK"
+            print("OK")
 
     # Reads the device configuration
     def config_read(self):
@@ -322,7 +322,6 @@ class el1_device:
 
         # requesting device configuration
         msg = [0x00, 0xFF, 0xFF]
-        print msg
         sent_bytes = self.address.write(0x02, msg, 100)
         # reading device configuration
         read_device = self.address.read(0x82, 0x03, 1000)
@@ -342,8 +341,8 @@ class el1_device:
             self.new_buffer.set_buffer(self.read_config)
             
             if self.debug:
-                print "#DEBUG# BUFFER SIZE: %s" % len(self.read_config)
-                print "#DEBUG# ORIGINAL BUFFER: %s" % self.read_config
+                print("#DEBUG# BUFFER SIZE: %s" % len(self.read_config))
+                print("#DEBUG# ORIGINAL BUFFER: %s" % self.read_config)
 
         usb.util.release_interface(self.address, 0x00)   
 
@@ -367,6 +366,8 @@ class el1_device:
         read_device = self.address.read(0x82, 0x03, 1000)
 
         self.address.ctrl_transfer(bmRequestType=0x40, bRequest=0x02, wValue=0x04)
+
+        usb.util.release_interface(self.address, 0x00)
         return True
 
     # Reads the device status (recording, stopped, ...)
@@ -415,8 +416,9 @@ class el1_device:
             self.read_block.extend(self.address.read(0x82, 0x1000, 1000))
 
         if self.debug:
-            print "#DEBUG# RECORDED DATAS: %s" % self.read_block[0:1000]
+            print("#DEBUG# RECORDED DATAS: %s" % self.read_block[0:1000])
 
+        usb.util.release_interface(self.address, 0x00)
         return True
 
 

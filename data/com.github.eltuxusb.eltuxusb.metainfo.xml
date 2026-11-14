@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.github.eltuxusb.eltuxusb</id>
+  <metadata_license>FSFAP</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+  <name>ELTuxUSB</name>
+  <summary>Linux support for Lascar EL-USB data loggers</summary>
+  <description>
+    <p>ELTuxUSB reads, configures and downloads recordings from the
+    EL-USB-1, EL-USB-2 and EL-USB-2-LCD data loggers from Lascar
+    Electronics. Downloaded data can be exported as CSV files and
+    plotted as graphs.</p>
+  </description>
+  <launchable type="desktop-id">com.github.eltuxusb.eltuxusb.desktop</launchable>
+  <url type="homepage">https://github.com/eltuxusb/eltuxusb</url>
+  <content_rating type="oars-1.1" />
+  <releases>
+    <release version="0.6" date="2025-11-13">
+      <description>
+        <p>Port to Python 3, GTK4 and libadwaita.</p>
+      </description>
+    </release>
+  </releases>
+</component>

@@ -12,13 +12,13 @@ class el1_input:
         self.fake = 0
 
     def request(self, text, base_value, min_value, max_value):
-        print text,
+        print(text, end=' ')
         while base_value < min_value or base_value > max_value:
-            base_value = input()
+            base_value = eval(input())
             if base_value < min_value:
-                print "value too low, should be between", min_value, "and", max_value
+                print("value too low, should be between", min_value, "and", max_value)
             if base_value > max_value:
-                print "value too high, should be between", min_value, "and", max_value
+                print("value too high, should be between", min_value, "and", max_value)
 
         return base_value
 
