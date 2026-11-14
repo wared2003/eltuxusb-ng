@@ -75,7 +75,7 @@ Run the program:
 
 It can also be used from the command line without the graphical interface:
 
-    eltuxusb -D /home/user/out.txt     # download the recordings to a file
+    eltuxusb -D /home/user/out.csv     # download the recordings to a CSV file
     eltuxusb -R /home/user/config.txt  # !WARNING! reprogram the device configuration from a file !WARNING!
     eltuxusb -d                        # debug mode (nothing is written to the device)
 

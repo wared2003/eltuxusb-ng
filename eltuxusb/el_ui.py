@@ -7,7 +7,7 @@ import usb.core
 import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
-from gi.repository import Gtk, Adw, GLib
+from gi.repository import Gtk, Adw, GLib, Gio
 
 from .el_device import el1_device, el1_math
 from .el_input import el1_input
@@ -358,6 +358,16 @@ class EltuxusbWindow(Gtk.ApplicationWindow):
     def download(self, source=None):
         dialog = Gtk.FileDialog()
         dialog.set_title("Please, choose an output file")
+        base = self.name_recording.strip() or "eltuxusb"
+        base = "".join(c if c not in '/\\:*?"<>|' else "_" for c in base)
+        dialog.set_initial_name("%s_%s.csv" % (base, time.strftime("%Y%m%d_%H%M%S")))
+        csv_filter = Gtk.FileFilter()
+        csv_filter.set_name("CSV files")
+        csv_filter.add_pattern("*.csv")
+        filters = Gio.ListStore.new(Gtk.FileFilter)
+        filters.append(csv_filter)
+        dialog.set_filters(filters)
+        dialog.set_default_filter(csv_filter)
 
         def on_response(dialog, result):
             try:
@@ -365,6 +375,8 @@ class EltuxusbWindow(Gtk.ApplicationWindow):
             except GLib.Error:
                 return
             path = file.get_path()
+            if not path.lower().endswith(".csv"):
+                path += ".csv"
 
             def worker():
                 try:

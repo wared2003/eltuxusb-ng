@@ -34,6 +34,11 @@ Référence comportementale : repo `eltuxusb/eltuxusb`, branche master (Python 2
 - Ne jamais appender deux fois le même widget à un parent → `Gtk-CRITICAL gtk_box_append`.
 - `Gtk.FileDialog` : `dialog.save(parent, None, cb)` / `dialog.open(...)`, finir avec
   `save_finish(result)` / `open_finish(result)` (lever `GLib.Error` si annulé).
+  Nom par défaut : `set_initial_name(...)` (PAS `set_current_name`, n'existe pas en GTK4).
+  Filtres : `set_filters()` attend un `Gio.ListModel` → `Gio.ListStore.new(Gtk.FileFilter)`
+  puis `.append(filtre)` (PAS `Gtk.ListStore`, mal typé pour PyGObject).
+  Le téléchargement UI propose `<nom_enregistrement>_<AAAAMMJJ_HHMMSS>.csv` et force
+  l'extension `.csv`.
 - Graphe embarqué : `from matplotlib.backends.backend_gtk4agg import FigureCanvas`,
   `Adw.Window` + `set_content(canvas)`.
 - I/O USB dans un thread (worker) puis `GLib.idle_add` pour toucher l'UI.
