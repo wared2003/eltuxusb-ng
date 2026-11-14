@@ -49,26 +49,23 @@ The udev rule described below is still required on the host for USB access.
 
 ## USB permissions
 
-We need read and write access to the device (libusb opens it read-write even for
-read-only operations). As a non-root user, install the udev rule shipped in this
-repository and reload the rules:
+One command installs a udev rule giving your user read/write access to the logger
+(libusb opens the device read-write even for read-only operations):
 
-    sudo cp 10-local.rules /etc/udev/rules.d/10-local.rules
+    echo 'SUBSYSTEM=="usb",ATTR{idVendor}=="10c4",ATTR{idProduct}=="0002",MODE="0666"' | sudo tee /etc/udev/rules.d/10-local.rules
     sudo udevadm control --reload-rules
     sudo udevadm trigger --action=change --subsystem-match=usb --attr-match=idVendor=10c4
 
-The rule (`10-local.rules`) is:
+Unplug and replug the logger so the rule applies, then check that its device node
+is world-writable:
 
-    SUBSYSTEM=="usb",ATTR{idVendor}=="10c4",ATTR{idProduct}=="0002",MODE="0666",GROUP="usbusers"
+    DEV=$(lsusb -d 10c4:0002 | awk '{print "/dev/bus/usb/" $2 "/" $4}' | tr -d ':')
+    ls -l "$DEV"        # expect crw-rw-rw-
 
-Unplug and replug the logger so the rule applies, then check that the device is
-visible and that its node is writable by your user:
+Quick fix without any rule (lost on replug): `sudo chmod 666 "$DEV"`
 
-    lsusb -d 10c4:0002
-    ls -l /dev/bus/usb/<bus>/<device>     # expect crw-rw-rw- (MODE 0666)
-
-If you get `Access denied (Errno 13)` when running eltuxusb, the rule is missing
-or the device was plugged before the rules were reloaded.
+If eltuxusb reports `Access denied (Errno 13)`, the rule is missing or the device
+was plugged before the rules were reloaded.
 
 ## Usage
 
