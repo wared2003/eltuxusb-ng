@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -42,6 +42,15 @@ jobs:
 
       - name: Publish the public key alongside the repository
         run: cp flatpak/eltuxusb-repo.gpg repo/
+
+      - name: Export a single-file bundle
+        run: flatpak build-bundle --gpg-sign=73015E7FEDCE7BFD91624423CE1D8D02552368D2 repo com.github.eltuxusb.eltuxusb.flatpak com.github.eltuxusb.eltuxusb master
+
+      - name: Upload the bundle to the GitHub release (tags only)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: com.github.eltuxusb.eltuxusb.flatpak
 
       - name: Setup Pages
         id: pages

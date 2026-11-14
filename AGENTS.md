@@ -104,6 +104,11 @@ réels téléchargés avec succès sur un EL-USB-2-LCD (série 061204174, nom «
   `flatpak remote-add --if-not-exists --gpg-import=eltuxusb-repo.gpg eltuxusb https://wared2003.github.io/eltuxusb-ng`
   puis `flatpak install eltuxusb com.github.eltuxusb.eltuxusb`.
   Sans la clé, l'install échoue : « Can't pull from untrusted non-gpg verified remote ».
+- Un bundle mono-fichier signé `com.github.eltuxusb.eltuxusb.flatpak` est exporté
+  (`flatpak build-bundle --gpg-sign=<fpr> repo ...`) et uploadé en asset de la
+  release GitHub sur les tags `v*` via `softprops/action-gh-release@v2`
+  (d'où `permissions: contents: write`). Install : `flatpak install <fichier>.flatpak`,
+  aucune clé GPG requise côté utilisateur pour un bundle.
 - Test local du build : `flatpak-builder --user --force-clean --state-dir=<dir même fs que build> --repo=<repo> <build> flatpak/...json`
   (state dir par défaut dans le repo = autre filesystem que /tmp → flatpak-builder 1.4.4 sort en erreur 1).
 - Piège : `application_id="com.github.eltuxusb.eltuxusb"` → une instance flatpak se « handoff »
