@@ -26,9 +26,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install flatpak and flatpak-builder
-        uses: flatpak/flatpak-github-action@v1
-        with:
-          branch: stable
+        run: sudo apt-get update && sudo apt-get install -y flatpak flatpak-builder
 
       - name: Add flathub remote
         run: flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
