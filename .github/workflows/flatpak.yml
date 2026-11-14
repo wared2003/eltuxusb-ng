@@ -29,7 +29,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y flatpak flatpak-builder
 
       - name: Add flathub remote
-        run: flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+        run: flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
       - name: Install GNOME SDK and Platform 51
         run: flatpak install --user --noninteractive flathub org.gnome.Sdk//51 org.gnome.Platform//51
