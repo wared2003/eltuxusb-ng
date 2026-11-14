@@ -38,7 +38,8 @@ Download the single-file bundle from the latest GitHub release and install it:
     wget https://github.com/wared2003/eltuxusb-ng/releases/latest/download/com.github.eltuxusb.eltuxusb.flatpak
     flatpak install com.github.eltuxusb.eltuxusb.flatpak
 
-(The bundle is rebuilt and attached to the release automatically on every `v*` tag.)
+(The bundle is rebuilt on every push to `main` — downloadable from the workflow run
+artifacts — and attached to the GitHub release automatically on every `v*` tag.)
 
 Or build it yourself from the manifest in `flatpak/`:
 
