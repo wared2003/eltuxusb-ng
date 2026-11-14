@@ -3,6 +3,8 @@
 
 import datetime, time, os
 
+import usb.core
+
 from .el_device import el1_device, el1_math
 from .el_parse import el1_parse
 
@@ -20,16 +22,17 @@ class el_cmd:
 
         self.dev1 = el1_device(self.debug, self.recover_mode)
 
-        if self.dev1.init() == False:
-            print((self.dev1.get_last_err()))
+        try:
+            if self.dev1.init() == False:
+                print((self.dev1.get_last_err()))
+                return
 
-        else:
             self.config  = self.dev1.get_config()
             self.model = self.dev1.device_model
             self.full_name = self.dev1.device_full_name
             self.sample_count = el1_math().base256to10(self.config[30:32])
 
-            print("Found: %s\nDownloading data to: %s" % (self.full_name, self.path)) 
+            print("Found: %s\nDownloading data to: %s" % (self.full_name, self.path))
 
             if self.dev1.download():
                 print("Finished: downloaded %s recordings" % self.sample_count)
@@ -37,6 +40,8 @@ class el_cmd:
 
                 self.status = self.dev1.stop_recording()
                 print(self.status)
+        except usb.core.USBError as e:
+            print(e)
 
     def recover(self):
         self.dev1 = el1_device(self.debug, self.recover_mode)
